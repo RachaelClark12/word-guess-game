@@ -1,31 +1,33 @@
 
-//Variable Declaration//
-var words = ["salt", "match", "sad", "materialistic", "planes", "thread", "industry", "discovery", "tiny", "wicked", "banana"];
-var word = [Math.floor(Math.random() * words.length)];
-var letters = word.split("");
-var numOfLetters = letters.length;
-var answer = [];
-var blanks = numOfLetters.length
+//Variable Declarations//
+var random = ["salt", "match", "sad", "materialistic", "planes", "thread", "industry", "discovery", "tiny", "wicked", "banana"];
+var word = " ";
+var letters = [];
+var wordlength = [];
+
+var wrongguess = [];
+
+var win = 0;
+var lose = 0;
+var remainingguesses = 15;
 
 
-//Console Log//
-console.log(words);
-console.log(word);
-console.log(letters);
-console.log(numOfLetters);
-console.log(answer);
-console.log(blanks);
+function startgame() {
+    //generate random word from array//
+    word = [Math.floor(Math.random() * words.length)];
 
+    //split letters of word//
+    letters = word.split("");
 
+    //store each letter as "_"
+    for (var i = 0; i < blanks; i++) {
+        letters.push("_");
+    } 
+    
+    // generate "_" for each letter
+    for (var i=0; i<letters; i++) {
+    }
 
-for (var i = 0; i < word.length; i++) {
-    answer[i].push("_");
+    //display "_" in HTML//
+    document.getElementById("word").innerHTML = " " + letters.join(" ");
 }
-
-while (reamaining > 0) {
-
-
-
-
-}
-
