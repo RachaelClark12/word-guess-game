@@ -43,26 +43,28 @@ function startGame() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 function playGame(letter) {
+
   for (var j = 0; j < lettersInWord.length; j++) {
     if (lettersInWord[j] === letter) {
       values[j] = letter;
     }
-
-
-    //how to store incorrect letters?
-    else if (letter[j] <0) {
-      guessesRemaining--;
-      incorrectGuesses.push(letter);
-    }
+    //else {
+     // console.log(guessesRemaining);
+     // guessesRemaining-=1;
+     // incorrectGuesses.push(letter);
+      //console.log(incorrectGuesses);
+   // }
   }
+  
 }
 
-  console.log(values);
-  console.log(incorrectGuesses);
-  console.log(guessesRemaining);
+
+console.log(values);
+console.log(incorrectGuesses);
+console.log(guessesRemaining);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-function reset() {
+function resetGame() {
   guessesRemaining = 12;
   incorrectGuesses = [];
   values = [];
@@ -72,12 +74,18 @@ function reset() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 function completeGame() {
-    if (lettersInWord.toString() === values.toString()) {
-      wins ++; 
-      reset();
-      document.getElementById("wins").innerHTML = " " + wins;
-    }}
+  if (lettersInWord.toString() === values.toString()) {
+    wins++;
+    resetGame();
+    document.getElementById("wins").innerHTML = " " + wins;
+  }
 
+  else if (guessesRemaining === 0) {
+    losses++;
+    reset();
+    document.getElementById("losses").innerHTML = " " + losses;
+  }
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 startGame()
@@ -92,3 +100,8 @@ document.onkeyup = function (event) {
   document.getElementById("chosenWord").innerHTML = " " + values.join(" ");
 }
 
+
+
+//questions:
+//how to code for incorrect guess??;
+//how to let full word display before resetting when completeGame();
