@@ -47,19 +47,46 @@ function playGame(letter) {
     if (lettersInWord[j] === letter) {
       values[j] = letter;
     }
-    ///else log wrong letter in incorrect guesses area and decrease remaining guesses by 1
 
+
+    //how to store incorrect letters?
+    else if (letter[j] <0) {
+      guessesRemaining--;
+      incorrectGuesses.push(letter);
+    }
   }
-  console.log(values);
 }
 
+  console.log(values);
+  console.log(incorrectGuesses);
+  console.log(guessesRemaining);
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+function reset() {
+  guessesRemaining = 12;
+  incorrectGuesses = [];
+  values = [];
+  startGame();
+  playGame();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+function completeGame() {
+    if (lettersInWord.toString() === values.toString()) {
+      wins ++; 
+      reset();
+      document.getElementById("wins").innerHTML = " " + wins;
+    }}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 startGame()
 
 document.onkeyup = function (event) {
   guess = String.fromCharCode(event.keyCode).toLowerCase();
   console.log(guess);
   playGame(guess);
+  completeGame();
   document.getElementById("guessesRemaining").innerHTML = " " + guessesRemaining;
   document.getElementById("incorrectGuesses").innerHTML = " " + incorrectGuesses;
   document.getElementById("chosenWord").innerHTML = " " + values.join(" ");
