@@ -1,5 +1,4 @@
 Variables:
-catWords = ["claw", "hairball", "groom", "kitten", "scratch", "tabby", "tomcat", "pounce", "meow", "feline", "calico"];
 chosenWord = "";  //word randomly chosen from catWords array
 lettersInWord = []; //chosenWord split into letter array
 incorrectGuesses = [];
@@ -8,11 +7,11 @@ values = [];  //"_" for each letter
 wins = 0;
 losses = 0;
 guessesRemaining = 12;
-guess = ""; //userinput
 isDisplayingCorrectAnswer = false
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+
 function startGame() {
+    catWords = ["claw", "hairball", "groom", "kitten", "scratch", "tabby", "tomcat", "pounce", "meow", "feline", "calico"];
     //1. Computer selects random word from array
     chosenWord = catWords[Math.floor(Math.random() * catWords.length)];
 
@@ -29,26 +28,28 @@ function startGame() {
         values.push("_");
     }
 
-    //5. Display “_” on screen for each letter in the word
+    updateScreen();
+
+    conosleLog();
+
+}
+
+function updateScreen() {
     document.getElementById("chosenWord").innerHTML = " " + values.join(" ");
     document.getElementById("guessesRemaining").innerHTML = " " + guessesRemaining;
+    document.getElementById("incorrectGuesses").innerHTML = " " + incorrectGuesses;
     document.getElementById("wins").innerHTML = " " + wins;
     document.getElementById("losses").innerHTML = " " + losses;
+    document.getElementById("chosenWord").style.color = "black";
+}
 
-    //6. Console Log
+function conosleLog() {
     console.log(guessesRemaining);
     console.log(chosenWord);
     console.log(lettersInWord);
     console.log(values);
 }
 
-///////////////////////////////////////////////////////////////////////////
-//make sure user guess is a letter! 
-function isLetter(ch) {
-    return /^[A-Z]$/i.test(ch);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 function playGame(letter) {
     var wasAnIncorrectGuess = true
     for (var j = 0; j < lettersInWord.length; j++) {
@@ -59,76 +60,58 @@ function playGame(letter) {
     }
     if (wasAnIncorrectGuess && !incorrectGuesses.includes(letter)) {
         incorrectGuesses.push(letter);
-    guessesRemaining--;
+        guessesRemaining--;
     }
+    updateScreen();
+    conosleLog();
 }
 
-
-console.log(values);
-console.log(incorrectGuesses);
-console.log(guessesRemaining);
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 function resetGame() {
-   // guessesRemaining = 12;
-    //incorrectGuesses.length = 0;
-    values = [];
-    console.log(values);
-    startGame();
-    playGame();
     guessesRemaining = 12;
     incorrectGuesses = [];
-    document.getElementById("chosenWord").style.color = "black"
+    values = [];
+    updateScreen();
+    startGame();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-function completeGame() {
+function checkIfGameIsComplete() {
     if (lettersInWord.toString() === values.toString()) {
+        isDisplayingCorrectAnswer = true
         wins++;
         document.getElementById("wins").innerHTML = " " + wins;
         document.getElementById("chosenWord").style.color = "green"
-        isDisplayingCorrectAnswer = true
-        setTimeout(function() {
+
+        setTimeout(function () {
             isDisplayingCorrectAnswer = false
             resetGame()
         }, 1500);
+
     }
-    else if (guessesRemaining ===0) {
-        //alert("Better luck next time!")
-        document.getElementById("chosenWord").innerHTML = "" + chosenWord;// trying to display word after losing
-        document.getElementById("chosenWord").style.color = "green" //trying to display word after losing in green
-        losses++;   
-        document.getElementById("losses").innerHTML = " " + losses;
-        resetGame();
-        updateScreen();
-        console.log(guessesRemaining);
-        console.log(incorrectGuesses);
+    else if (guessesRemaining === 0) {
+        document.getElementById("chosenWord").innerHTML = "" + lettersInWord.join(" ");
+        document.getElementById("chosenWord").style.color = "red"
+        isDisplayingCorrectAnswer = true;
+        losses++;
+        setTimeout(function () {
+            isDisplayingCorrectAnswer = false
+            resetGame()
+        }, 1500);
+
+        //document.getElementById("losses").innerHTML = " " + losses;
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 startGame()
-
 document.onkeyup = function (event) {
-
-    if (isLetter(event.key) && !isDisplayingCorrectAnswer) {
-    guess = String.fromCharCode(event.keyCode).toLowerCase();
-    console.log(guess);
-    playGame(guess);
-    updateScreen();
-    completeGame();
+    var guess;
+    function isLetter(ch) {
+        return /^[A-Z]$/i.test(ch);
     }
+    if (isLetter(event.key) && !isDisplayingCorrectAnswer) {
+        guess = String.fromCharCode(event.keyCode).toLowerCase();
+        console.log(guess);
+        playGame(guess);
+        checkIfGameIsComplete();
+    }
+
 }
-
-function updateScreen() {
-    document.getElementById("guessesRemaining").innerHTML = " " + guessesRemaining;
-    document.getElementById("incorrectGuesses").innerHTML = " " + incorrectGuesses;
-    document.getElementById("chosenWord").innerHTML = " " + values.join(" ");
-}
-
-
-
-//issues:
-//display full word if lose in red!
